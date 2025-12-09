@@ -1,0 +1,76 @@
+<!-- mindwell/base.html -->
+<!-- Gracious Ogyiri Asare- gpoa@bu.edu -->
+
+{% load static %}
+<html>
+  <head>
+    <title>MindWell </title>
+    <link rel="stylesheet" href="{% static 'styles.css' %}" />
+  </head>
+  <body>
+    <header>
+      <div class="header_logo">
+        {% load static %}
+        <img src="{% static 'logo.png' %}" alt="Logo" class="logo" />
+        <h1>MindWell</h1>
+      </div>
+
+      <div class="header-right">
+        {% if request.user.is_authenticated %} {% if is_patient %}
+        <p
+          >Logged in as
+          <strong>{{ patient.first_name }} {{ patient.last_name }}</strong></p
+        >
+        {% elif is_provider %}
+        <p
+          >Logged in as
+          <strong
+            >Dr. {{ provider.first_name }} {{ provider.last_name }}</strong
+          ></p
+        >
+        {% else %}
+        <p>Logged in as <strong>{{ user.username }}</strong></p>
+        {% endif %}
+        <form method="post" action="{% url 'logout' %}">
+          {% csrf_token %}
+          <button type="submit">Logout</button>
+        </form>
+        {% else %}
+        <a href="{% url 'login' %}"><button type="button">Login</button></a>
+        <a href="{% url 'patient_register' %}"
+          ><button type="button">Register</button></a
+        >
+        {% endif %}
+      </div>
+    </header>
+
+    <nav class="navbar">
+      {% if is_patient %}
+      <a href="{% url 'patient_dashboard' patient.pk %}">My Dashboard</a>
+      <a href="{% url 'provider_list' %}">Find A Therapist</a>
+      <a href="{% url 'view_messages' %}">
+        Messages {% if unread_messages %}({{ unread_messages }}){% endif %}
+      </a>
+      {% elif is_provider %}
+      <a href="{% url 'provider_dashboard' provider.pk %}">Dashboard</a>
+      <a href="{% url 'view_messages' %}">
+        Messages {% if unread_messages %}({{ unread_messages }}){% endif %}
+      </a>
+      {% else %}
+      <a href="{% url 'home' %}">Home</a>
+      <a href="{% url 'provider_register' %}">Work With Us</a>
+
+      {% endif %}
+    </nav>
+
+    <div class="body">
+      {% if messages %} {% for msg in messages %}
+      <div class="alert">{{ msg }}</div>
+      {% endfor %} {% endif %} {% block content %}{% endblock %}
+    </div>
+
+    <footer>
+      <p>Created by Gracious Ogyiri Asare for CS412.</p>
+    </footer>
+  </body>
+</html>

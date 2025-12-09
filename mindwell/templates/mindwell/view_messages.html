@@ -1,0 +1,30 @@
+
+<!-- mindwell/view_messages.html -->
+<!-- Gracious Ogyiri Asare- gpoa@bu.edu -->
+{% extends "mindwell/base.html" %}
+{% block content %}
+<h2>All Messages</h2>
+
+{% if threads %}
+  {% for msg in threads %}
+    {% with plan=msg.therapy_plan %}
+      <div class="thread">
+        <h3>
+          {% if is_provider %}
+            {{ plan.patient.first_name }} {{ plan.patient.last_name }}
+          {% else %}
+            Dr. {{ plan.health_provider.first_name }}{{ plan.health_provider.last_name }}
+          {% endif %}
+        </h3>
+
+        <p>Plan: {{ plan.plan_type.name }}</p>
+
+        <a href="{% url 'send_message' plan.pk %}"><button>Chat</button></a>
+      </div>
+    {% endwith %}
+  {% endfor %}
+{% else %}
+  <p>No messages yet.</p>
+{% endif %}
+
+{% endblock content %}

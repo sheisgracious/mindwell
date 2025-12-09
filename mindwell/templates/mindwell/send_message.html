@@ -1,0 +1,31 @@
+
+<!-- mindwell/send_message.html -->
+<!-- Gracious Ogyiri Asare- gpoa@bu.edu -->
+
+{% extends "mindwell/base.html" %}
+
+{% block content %}
+<h2>Messages with {% if is_provider %}{{ therapy_plan.patient.first_name }} {{ therapy_plan.patient.last_name }}{% else %}Dr. {{ therapy_plan.health_provider.last_name }}{% endif %}</h2>
+
+<p><strong>Plan:</strong> {{ therapy_plan.plan_type.name }}</p>
+
+<a href="{% url 'view_messages' %}"><button type="button">Back to messages</button></a>
+
+<h3>Message History</h3>
+{% for msg in message_list %}
+  <div style="margin: 15px 0; padding: 10px; background: {% if msg.sender == request.user %}#e3f2fd{% else %}#f5f5f5{% endif %}; border-radius: 8px;">
+    <p><strong>{% if msg.sender == request.user %}You{% else %}{{ msg.sender.username }}{% endif %}</strong> - {{ msg.created_at|date:"M d, Y g:i A" }}</p>
+    <p>{{ msg.message }}</p>
+  </div>
+{% empty %}
+  <p>No messages yet.</p>
+{% endfor %}
+
+<h3>Send Message</h3>
+<form method="post">
+  {% csrf_token %}
+  <input type="hidden" name="subject" value="Reply">
+  <textarea name="message" rows="4" style="width: 100%;" required></textarea>
+  <button type="submit">Send</button>
+</form>
+{% endblock content %}

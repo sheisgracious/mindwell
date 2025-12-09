@@ -1,0 +1,25 @@
+<!-- mindwell/create_therapyplan_form.html -->
+<!-- Gracious Ogyiri Asare- gpoa@bu.edu -->
+
+{% extends "mindwell/base.html" %}
+
+{% block content %}
+<h2>Start Your Therapy Plan</h2>
+<p>Create a therapy plan with Dr. {{ provider.first_name }} {{ provider.last_name }}</p>
+
+<h3>Provider Info</h3>
+<p><strong>Provider:</strong> Dr. {{ provider.first_name }} {{ provider.last_name }}</p>
+<p><strong>Specialization:</strong> {{ provider.specialization }}</p>
+
+<form method="post">
+  {% csrf_token %}
+  
+  <h3>Plan Details</h3>
+  <table>
+    {{ form.as_table }}
+  </table>
+
+  <button type="submit">Create Plan</button>
+  <a href="{% url 'provider_detail' provider.pk %}"><button type="button">Cancel</button></a>
+</form>
+{% endblock content %}

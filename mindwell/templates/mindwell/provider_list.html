@@ -1,0 +1,97 @@
+<!-- mindwell/provider_list.html -->
+<!-- Gracious Ogyiri Asare- gpoa@bu.edu -->
+
+{% extends "mindwell/base.html" %} {% block content %}
+<h2>Find Your Therapist</h2>
+
+<div class="search">
+  <form
+    method="get"
+    action="{% url 'provider_list' %}"
+  >
+    <input
+      type="text"
+      name="search"
+      value="{{ search }}"
+      placeholder="Search"
+    />
+    <input
+      type="text"
+      name="specialization"
+      value="{{ specialization }}"
+      placeholder="Specialization"
+    />
+    <input
+      type="text"
+      name="language"
+      value="{{ language }}"
+      placeholder="Language"
+    />
+    <button type="submit">Search</button>
+    {% if search or specialization or language %}
+    <a href="{% url 'provider_list' %}"><button type="button">Clear</button></a>
+    {% endif %}
+  </form>
+</div>
+
+<p>Showing {{ providers|length }}.</p>
+
+{% if providers %}
+<div>
+  {% for provider in providers %}
+  <div class="provider-card">
+    {% if provider.profile_img %}
+    <img
+      src="{{ provider.profile_img.url }}"
+      alt="{{ provider.first_name }} {{ provider.last_name }}"
+      class="provider-img"
+    />
+    {% else %}
+    <div
+      class="provider-img"
+      style="
+        background: #ecf0f1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #95a5a6;
+        font-weight: bold;
+      "
+    >
+      {{ provider.first_name|first }}{{ provider.last_name|first }}
+    </div>
+    {% endif %}
+
+    <div class="provider-content">
+      <h3>Dr. {{ provider.first_name }} {{ provider.last_name }}</h3
+      >
+      {% if provider.verified %}
+      <p>Verified</p>
+      {% else %}
+      <p> Not Verified </p>
+      {% endif %}
+
+      <p><strong>{{ provider.occupation }}</strong></p>
+      <p><strong>Specialization:</strong> {{ provider.specialization }}</p>
+      <p><strong>Experience:</strong> {{ provider.experience_years }} years</p>
+      <p><strong>Languages:</strong> {{ provider.languages }}</p>
+      {% if provider.bio %}
+      <p>{{ provider.bio|truncatewords:25 }}</p>
+      {% endif %}
+
+      <a href="{% url 'provider_detail' provider.pk %}"
+        ><button>View Profile</button></a
+      >
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% else %}
+<div class="alert">
+  <p
+    >No results found.</p >
+</div>
+{% endif %}
+
+
+{% endblock content %}

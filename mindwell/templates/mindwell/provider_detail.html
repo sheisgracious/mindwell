@@ -1,0 +1,77 @@
+<!-- mindwell/provider_detail.html -->
+<!-- Gracious Ogyiri Asare- gpoa@bu.edu -->
+
+{% extends "mindwell/base.html" %}
+
+{% block content %}
+<a href="{% url 'provider_list' %}"><button type="button">Back to All</button></a>
+
+<h2>Dr. {{ provider.first_name }} {{ provider.last_name }}</h2>
+
+<div class="providerinfo">
+  {% if provider.profile_img %}
+  <img src="{{ provider.profile_img.url }}" alt="{{ provider.first_name }} {{ provider.last_name }}" class="profile-image">
+  {% endif %}
+
+  <div class="detail">
+    <h3>Profile</h3>
+    <p><strong>Occupation:</strong> {{ provider.occupation }}</p>
+    <p><strong>Specialization:</strong> {{ provider.specialization }}</p>
+    <p><strong>Experience:</strong> {{ provider.experience_years }} years</p>
+    <p><strong>Languages:</strong> {{ provider.languages }}</p>
+    <p><strong>Location:</strong> {{ provider.address }}</p>
+  </div>
+
+  {% if provider.bio %}
+  <div class="detail">
+    <h3>About</h3>
+    <p>{{ provider.bio }}</p>
+  </div>
+  {% endif %}
+
+  <div class="detail">
+    <h3>Weekly Availability</h3>
+    {% if availability_by_day %}
+    <div class="availability-slots">
+      {% for day, slots in availability_by_day.items %}
+      <div class="days">
+        <h4>{{ day|title }}</h4>
+        <ul>
+          {% for slot in slots %}
+          <li>{{ slot.start_time|time:"g:i A" }} - {{ slot.end_time|time:"g:i A" }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <p>Availability schedule not yet set.</p>
+    {% endif %}
+  </div>
+
+  <div class="info-section">
+    <h3>Therapy Plans Available</h3>
+    {% if plan_types %}
+    {% for plan_type in plan_types %}
+    <div class="card">
+      <h4>{{ plan_type.name }}</h4>
+      <p>{{ plan_type.description }}</p>
+      {% if plan_type.base_cost %}
+      <p><strong>Cost:</strong> ${{ plan_type.base_cost }}/session</p>
+      {% endif %}
+    </div>
+    {% endfor %}
+    {% else %}
+    <p>No specific therapy plans listed.</p>
+    {% endif %}
+  </div>
+
+  {% if is_patient %}
+  <div>
+    <h3>Ready to begin?</h3>
+    <a href="{% url 'therapyplan_create' provider.pk %}"><button>Start Therapy Plan</button></a>
+  </div>
+  {% endif %}
+</div>
+
+{% endblock content %}

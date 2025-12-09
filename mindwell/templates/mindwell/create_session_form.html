@@ -1,0 +1,51 @@
+<!-- mindwell/create_session_form.html -->
+<!-- Gracious Ogyiri Asare- gpoa@bu.edu -->
+
+{% extends "mindwell/base.html" %}
+
+{% block content %}
+<h2>Schedule a Session</h2>
+
+<div class="plan-info">
+  <h3>Therapy Plan Details</h3>
+  <p><strong>Plan Type:</strong> {{ therapy_plan.plan_type.name }}</p>
+  <p
+    ><strong>Provider:</strong> Dr. {{ therapy_plan.health_provider.first_name }} {{ therapy_plan.health_provider.last_name }}</p>
+  <p><strong>Price per session:</strong> ${{ therapy_plan.cost }}</p>
+</div>
+
+<div class="availability">
+  <h3>Dr. {{ therapy_plan.health_provider.last_name }}'s Weekly Availability</h3>
+  {% if availability_by_day %}
+  <div class="times">
+    {% for day, slots in availability_by_day.items %}
+    <div class="days">
+      <h4>{{ day|title }}</h4>
+      <ul>
+        {% for slot in slots %}
+        <li
+          >{{ slot.start_time|time:"g:i A" }} - {{ slot.end_time|time:"g:i A" }}</li
+        >
+        {% endfor %}
+      </ul>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <p>This provider is unavailable.</p>
+  {% endif %}
+</div>
+
+<div class="book">
+  <h3>Session Details</h3>
+  <form method="post">
+    {% csrf_token %}
+    <table> {{ form.as_table }} </table>
+    <p class="note">Please select a date and time within the provider's available hours shown above. The provider with message you to confirm </p>
+    <button type="submit" class="book">Schedule Session</button>
+    <a href="{% url 'patient_dashboard' therapy_plan.patient.pk %}"
+      ><button type="button">Cancel</button></a
+    >
+  </form>
+</div>
+{% endblock content %}

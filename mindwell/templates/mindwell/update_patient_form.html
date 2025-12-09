@@ -1,0 +1,19 @@
+<!-- mindwell/update_patient_form.html -->
+<!-- Gracious Ogyiri Asare- gpoa@bu.edu -->
+
+{% extends "mindwell/base.html" %}
+
+{% block content %}
+<h2>Update Your Information</h2>
+
+<form method="post">
+  {% csrf_token %}
+  
+  <table>
+    {{ form.as_table }}
+  </table>
+
+  <button type="submit">Save Changes</button>
+  <a href="{% url 'patient_dashboard' object.pk %}"><button type="button">Cancel</button></a>
+</form>
+{% endblock content %}

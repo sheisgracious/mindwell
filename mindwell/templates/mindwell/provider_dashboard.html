@@ -1,0 +1,118 @@
+<!-- mindwell/provider_dashboard.html -->
+<!-- Gracious Ogyiri Asare- gpoa@bu.edu -->
+
+{% extends "mindwell/base.html" %} {% block content %}
+<h2>Dr. {{ provider.last_name }}'s Dashboard</h2>
+<a href="{% url 'provider_update' %}"><button>Update Your Profile</button></a>
+<p>Manage your patients and sessions</p>
+
+<div class="summary">
+  <div class="card">
+    <h3>{{ today_sessions|length }}</h3>
+    <p>Today's Sessions</p>
+  </div>
+  <div class="card">
+    <h3>{{ active_plans|length }}</h3>
+    <p>Active Patients</p>
+  </div>
+
+  <div class="card">
+    <h3>{{ upcoming_sessions|length }}</h3>
+    <p>Total Upcoming Sessions</p>
+  </div>
+</div>
+
+{% if today_sessions %}
+<h3>Today's Sessions</h3>
+<table>
+  <tr>
+    <th>Time</th>
+    <th>Patient</th>
+    <th>Type</th>
+    <th>Duration</th>
+    <th>Payment</th>
+    <th>Actions</th>
+  </tr>
+  {% for session in today_sessions %}
+  <tr>
+    <td>{{ session.session_time|time:"g:i A" }}</td>
+    <td
+      >{{ session.therapy_plan.patient.first_name }} {{ session.therapy_plan.patient.last_name }}</td
+    >
+    <td>{{ session.session_type }}</td>
+    <td>{{ session.duration }} min</td>
+    <td>{{ session.payment_status }}</td>
+    <td>
+      <a href="{% url 'session_update' session.pk %}"
+        ><button>Update</button></a
+      >
+      <a href="{% url 'send_message' session.therapy_plan.pk %}"
+        ><button>Message</button></a
+      >
+    </td>
+  </tr>
+  {% endfor %}
+</table>
+{% endif %}
+
+<h3>Upcoming Sessions</h3>
+{% if upcoming_sessions %}
+<table>
+  <tr>
+    <th>Date</th>
+    <th>Time</th>
+    <th>Patient</th>
+    <th>Plan Type</th>
+    <th>Type</th>
+    <th>Duration</th>
+    <th>Actions</th>
+  </tr>
+  {% for session in upcoming_sessions %}
+  <tr>
+    <td>{{ session.session_date|date:"M d, Y" }}</td>
+    <td>{{ session.session_time|time:"g:i A" }}</td>
+    <td
+      >{{ session.therapy_plan.patient.first_name }} {{ session.therapy_plan.patient.last_name }}</td
+    >
+    <td>{{ session.therapy_plan.plan_type.name }}</td>
+    <td>{{ session.session_type }}</td>
+    <td>{{ session.duration }} min</td>
+    <td>
+      <a href="{% url 'session_update' session.pk %}"
+        ><button>Update</button></a
+      >
+      <a href="{% url 'send_message' session.therapy_plan.pk %}"
+        ><button>Message</button></a
+      >
+    </td>
+  </tr>
+  {% endfor %}
+</table>
+{% else %}
+<p>No upcoming sessions scheduled.</p>
+{% endif %}
+
+<h3>Active Therapy Plans</h3>
+{% if active_plans %}
+<div>
+  {% for plan in active_plans %}
+  <div class="card">
+    <h4>{{ plan.patient.first_name }} {{ plan.patient.last_name }}</h4>
+    <p><strong>Plan:</strong> {{ plan.plan_type.name }}</p>
+    <p><strong>Started:</strong> {{ plan.start_date|date:"M d, Y" }}</p>
+    <p><strong>Cost:</strong> ${{ plan.cost }}</p>
+    <p><strong>Status:</strong> {{ plan.status }}</p>
+    {% if plan.notes %}
+    <p><strong>Notes:</strong> {{ plan.notes }}</p>
+    {% endif %}
+    <p><strong>Contact:</strong> {{ plan.patient.email }} </p>
+    <p>Emergency Contact Name: {{ plan.patient.emergency_contact_name }}</p>
+
+    <p>Emergency Contact Name: {{ plan.patient.emergency_contact_phone }}</p>
+    <a href="{% url 'send_message' plan.pk %}"><button>Send Message</button></a>
+  </div>
+  {% endfor %}
+</div>
+{% else %}
+<p>No active therapy plans at this time.</p>
+{% endif %} {% endblock content %}

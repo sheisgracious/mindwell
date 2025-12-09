@@ -1,0 +1,23 @@
+<!-- mindwell/home.html -->
+<!-- Gracious Ogyiri Asare- gpoa@bu.edu -->
+
+{% extends "mindwell/base.html" %}
+
+{% block content %}
+<h2>Log In</h2>
+
+<form method="post">
+  {% csrf_token %}
+  <table>
+    {{ form.as_table }}
+  </table>
+  
+  <button type="submit">Log In</button>
+  <input type="hidden" name="next" value="{% url 'home' %}">
+</form>
+
+<div>
+  <p>Don't have an account?</p>
+  <a href="{% url 'patient_register' %}"><button type="button">Sign Up</button></a>
+</div>
+{% endblock content %}

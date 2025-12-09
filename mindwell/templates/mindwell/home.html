@@ -1,0 +1,38 @@
+<!-- mindwell/home.html -->
+<!-- Gracious Ogyiri Asare- gpoa@bu.edu -->
+
+{% extends "mindwell/base.html" %} {% load static %} {% block content %}
+
+<div class="homepage">
+  <div class="description">
+    <h2>A Safe Space to figure things out</h2>
+
+    <ul class="features">
+      <li>Convenient- you can access anytime, anywhere</li>
+      <li>Professional support from licensed and verified therapists</li>
+      <li>Flexible options available based on your needs</li>
+    </ul>
+
+    <div class="btns">
+      {% if request.user.is_authenticated %} {% if is_patient %}
+      <a href="{% url 'provider_list' %}"><button>Find a therapist</button></a>
+      {% elif is_provider %}
+      <a href="{% url 'provider_dashboard' provider.pk %}"
+        ><button>Go to Dashboard</button></a
+      >
+      {% endif %} {% else %}
+      <a href="{% url 'patient_register' %}"><button>Get started</button></a>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="placeholder">
+    <img
+      src="https://media.istockphoto.com/id/1289220545/photo/beautiful-woman-smiling-with-crossed-arms.jpg?s=612x612&w=0&k=20&c=qmOTkGstKj1qN0zPVWj-n28oRA6_BHQN8uVLIXg0TF8="
+      alt="therapist placeholder"
+    />
+  </div>
+</div>
+
+
+{% endblock content %}

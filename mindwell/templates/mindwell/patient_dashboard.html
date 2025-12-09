@@ -1,0 +1,88 @@
+<!-- mindwell/patient_dashboard.html -->
+<!-- Gracious Ogyiri Asare- gpoa@bu.edu -->
+
+{% extends "mindwell/base.html" %} {% block content %}
+<h2>Welcome, {{ patient.first_name }}!</h2>
+
+<h3>Your Profile Information</h3>
+<p><strong>Name:</strong> {{ patient.first_name }} {{ patient.last_name }}</p>
+<p><strong>Email:</strong> {{ patient.email }}</p>
+<p><strong>Date of Birth:</strong> {{ patient.dob }}</p>
+<p><strong>Emergency Contact:</strong> {{ patient.emergency_contact_name }}</p>
+<p><strong>Insurance:</strong> {{ patient.insurance_provider }}</p>
+<p><strong>Member Since:</strong> {{ patient.join_date }}</p>
+
+<a href="{% url 'patient_update' %}"><button>Update Info</button></a>
+
+<h3>Therapy Plans</h3>
+
+{% if active_plans %}
+<div>
+  {% for plan in active_plans %}
+  <div>
+    <h4>{{ plan.plan_type.name }} with Dr. {{ plan.health_provider.first_name }} {{ plan.health_provider.last_name }}</h4>
+
+    <p><strong>Started:</strong> {{ plan.start_date }}</p>
+    <p><strong>Cost:</strong> ${{ plan.cost }}</p>
+    {% if plan.notes %}
+    <p>{{ plan.notes }}</p>
+    {% endif %}
+    <a href="{% url 'session_create' plan.pk %}"
+      ><button>Book Session</button></a
+    >
+  </div>
+  <hr />
+  {% endfor %}
+</div>
+{% else %}
+<p>You don't have any plans yet.</p>
+<a href="{% url 'provider_list' %}"><button>Find a Therapist</button></a>
+{% endif %}
+
+<h3>Booked Sessions</h3>
+{% if upcoming_sessions %}
+<table>
+  <tr>
+    <th>Date</th>
+    <th>Time</th>
+    <th>Therapist</th>
+    <th>Type</th>
+    <th>Duration</th>
+    <th>Payment</th>
+  </tr>
+  {% for session in upcoming_sessions %}
+  <tr>
+    <td>{{ session.session_date }}</td>
+    <td>{{ session.session_time }}</td>
+    <td>Dr. {{ session.therapy_plan.health_provider.last_name }}</td>
+    <td>{{ session.session_type }}</td>
+    <td>{{ session.duration }} min</td>
+    <td>{{ session.payment_status }}</td>
+  </tr>
+  {% endfor %}
+</table>
+{% else %}
+<p>No upcoming sessions scheduled.</p>
+{% endif %}
+
+<h3> Session History</h3>
+{% if past_sessions %}
+<table>
+  <tr>
+    <th>Date</th>
+    <th>Therapist</th>
+    <th>Type</th>
+    <th>Status</th>
+  </tr>
+  {% for session in past_sessions %}
+  <tr>
+    <td>{{ session.session_date }}</td>
+    <td>Dr. {{ session.therapy_plan.health_provider.last_name }}</td>
+    <td>{{ session.session_type }}</td>
+    <td>{{ session.status }}</td>
+  </tr>
+  {% endfor %}
+</table>
+{% else %}
+<p>No past sessions.</p>
+{% endif %} {% endblock content %}

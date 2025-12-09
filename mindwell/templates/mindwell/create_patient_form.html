@@ -1,0 +1,32 @@
+<!-- mindwell/create_patient_form.html -->
+<!-- Gracious Ogyiri Asare- gpoa@bu.edu -->
+
+{% extends "mindwell/base.html" %}
+
+{% block content %}
+<h2>Registration</h2>
+<p>Create your account to start your plan</p>
+
+<form method="post">
+  {% csrf_token %}
+
+  <div class="info">
+    <h3> Information</h3>
+    <table>
+      {{ user_form.as_table }}
+    </table>
+  </div>
+
+  <div class="info">
+    <h3>Personal Information</h3>
+    <table>
+      {{ form.as_table }}
+    </table>
+  </div>
+
+  <div class="form-btns">
+    <button type="submit">Create Account</button>
+    <a href="{% url 'home' %}"><button type="button">Cancel</button></a>
+  </div>
+</form>
+{% endblock content %}

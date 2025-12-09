@@ -1,0 +1,18 @@
+<!-- mindwell/availability_delete.html -->
+<!-- Gracious Ogyiri Asare- gpoa@bu.edu -->
+{% extends "mindwell/base.html" %} {% block content %}
+<h2>Delete this Availability</h2>
+
+<p>Are you sure you want to remove this time slot?</p>
+<ul>
+  <li><strong>Day:</strong> {{ object.day_of_week|title }}</li>
+  <li
+    ><strong>Time:</strong> {{ object.start_time|time:"g:i A" }} - {{ object.end_time|time:"g:i A" }}</li>
+</ul>
+
+<form method="post">
+  {% csrf_token %}
+  <button type="submit" class="btn">Yes</button>
+  <a href="{% url 'provider_update' %}" class="btn"><button class="btn">No</button></a>
+</form>
+{% endblock content %}

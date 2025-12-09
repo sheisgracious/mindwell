@@ -1,0 +1,20 @@
+<!-- mindwell/create_provider_form.html -->
+<!-- Gracious Ogyiri Asare- gpoa@bu.edu -->
+
+{% extends "mindwell/base.html" %} {% block content %}
+<h2>Provider Registration</h2>
+<p>Join MindWell as a mental health provider. You will be contacted for verification purposes.</p>
+
+<form method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+
+  <h3>Profile Information</h3>
+  <table> {{ user_form.as_table }} </table>
+
+  <h3>Professional Information</h3>
+  <table> {{ form.as_table }} </table>
+
+  <button type="submit">Register</button>
+  <a href="{% url 'home' %}"><button type="button">Cancel</button></a>
+</form>
+{% endblock content %}

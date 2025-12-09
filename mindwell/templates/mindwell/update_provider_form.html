@@ -1,0 +1,93 @@
+<!-- mindwell/update_provider_form.html -->
+<!-- Gracious Ogyiri Asare- gpoa@bu.edu -->
+
+{% extends "mindwell/base.html" %}
+
+{% block content %}
+<h2>Update Your Profile</h2>
+
+<h3>Your Profile</h3>
+<div class="info-section">
+  {% if provider.profile_img %}
+  <img src="{{ provider.profile_img.url }}" alt="{{ provider.first_name }} {{ provider.last_name }}" class="profile-image">
+  {% endif %}
+  
+  <p><strong>Name:</strong> Dr. {{ provider.first_name }} {{ provider.last_name }}</p>
+  <p><strong>Specialization:</strong> {{ provider.specialization }}</p>
+  <p><strong>Experience:</strong> {{ provider.experience_years }} years</p>
+  <p><strong>Languages:</strong> {{ provider.languages }}</p>
+  <p><strong>Email:</strong> {{ provider.email }}</p>
+  <p><strong>Member Since:</strong> {{ provider.join_date|date:"M Y" }}</p>
+</div>
+<form method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  
+  <table>
+    {{ form.as_table }}
+  </table>
+
+  <button type="submit">Save Profile Changes</button>
+  <a href="{% url 'provider_dashboard' object.pk %}"><button type="button">Cancel</button></a>
+</form>
+
+<hr style="margin: 40px 0;">
+
+<h3>Manage Your Availability</h3>
+<p>Set your weekly schedule</p>
+
+<h4>Add New Availability Slot</h4>
+<form method="post" action="{% url 'manage_availability' %}">
+  {% csrf_token %}
+  <table>
+    <tr>
+      <th>Day of Week:</th>
+      <td>
+        <select name="day_of_week">
+          <option value="monday">Monday</option>
+          <option value="tuesday">Tuesday</option>
+          <option value="wednesday">Wednesday</option>
+          <option value="thursday">Thursday</option>
+          <option value="friday">Friday</option>
+          <option value="saturday">Saturday</option>
+          <option value="sunday">Sunday</option>
+        </select>
+      </td>
+    </tr>
+    <tr>
+      <th>Start Time:</th>
+      <td><input type="time" name="start_time" required></td>
+    </tr>
+    <tr>
+      <th>End Time:</th>
+      <td><input type="time" name="end_time" required></td>
+    </tr>
+    <tr>
+      <th>Available:</th>
+      <td><input type="checkbox" name="is_available" checked></td>
+    </tr>
+  </table>
+  <button type="submit">Add Availability</button>
+</form>
+
+<h4>Current Availability</h4>
+{% if object.get_availability_by_day %}
+  {% for day, slots in object.get_availability_by_day.items %}
+  <div class="day-availability">
+    <h4>{{ day|title }}</h4>
+    <ul>
+      {% for slot in slots %}
+      <li>
+        {{ slot.start_time|time:"g:i A" }} - {{ slot.end_time|time:"g:i A" }}
+        <a href="{% url 'delete_availability' slot.pk %}">
+          <button type="button" style="background: #dc2626; padding: 4px 8px; font-size: 12px; margin-left: 10px;">Delete</button>
+        </a>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+  {% endfor %}
+{% else %}
+  <p>No availability set yet. Add your schedule above.</p>
+{% endif %}
+
+{% endblock content %}

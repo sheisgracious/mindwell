@@ -130,3 +130,16 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 MEDIA_URL= "/media/" 
+
+import socket
+CS_DEPLOYMENT_HOSTNAME = 'cs-webapps.bu.edu'
+
+if socket.gethostname() == CS_DEPLOYMENT_HOSTNAME:
+    STATIC_URL = '/gpoa/static/'
+    MEDIA_URL = '/gpoa/media/'
+
+    # STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+    # STATIC_URL = '/static/'
+    # STATICFILES_DIRS = [
+    #     os.path.join(BASE_DIR, "static"),
+    # ]

@@ -29,7 +29,7 @@ Patient Account:
 - Username: `fatima.khan`
 - Password: `MindWell123!`
 
-## 🛠️ Technologies Used
+## Technologies Used
 
 - **Backend**: Python3, Django 5.2.6
 - **Database**: SQLite3
@@ -37,13 +37,13 @@ Patient Account:
 - **Authentication**: Django Auth
 - **Architecture**: Model-View-Template (MVT)
 
-## 📋 Prerequisites
+## Prerequisites
 
 - Python 3.8 or higher
 - pip 
 - Git
 
-## 💻 Installation & Setup
+## Installation & Setup
 
 1. **Clone the repository**
    ```bash
@@ -82,11 +82,11 @@ Patient Account:
    - Open your browser and navigate to `http://localhost:8000/mindwell/`
    - Admin panel: `http://localhost:8000/admin/`
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 mindwell/
-├── mindwell/              # Main application
+├── mindwell/             # Main application
 │   ├── models.py         # Database models
 │   ├── views.py          # View logic
 │   ├── forms.py          # Django forms
@@ -100,10 +100,10 @@ mindwell/
 ├── media/                # User-uploaded files
 ├── staticfiles/          # Collected static files
 ├── manage.py             # Django management script
-└── db.sqlite3           # SQLite database
+└── db.sqlite3            # SQLite database
 ```
 
-## 🗄️ Database Schema
+## Database Models
 
 Key models include:
 - **HealthProvider**: Therapist profiles with specializations and availability
